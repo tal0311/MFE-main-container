@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Your xx description goes here" />
+    <meta name="keywords" content="keyword1, keyword2, keyword3" />
+    <meta name="author" content="Your Name" />
+    <link rel="icon" href="./forum_FILL0_wght400_GRAD0_opsz24.png" />
+    <link rel="stylesheet" href="/css/app.css" />
+
+    <!-- helpers css -->
+    <link
+      rel="stylesheet"
+      href="https://rawcdn.githack.com/tal0311/css-cdn/055b836d3f4143a2270c2fc3ad90dcc3792fd04d/global-helpers.css"
+    />
+    <!-- vars css -->
+    <link
+      rel="stylesheet"
+      href="https://rawcdn.githack.com/tal0311/css-cdn/70f6d59461306d6ed62910e320bd900b1042c3fa/global-vars.css"
+    />
+    <title>Micro Front End Bulletin Board</title>
+  </head>
+  <body app="Main Container" class="app-container" onload="onInit()">
+    <section class="header">
+      <!-- dev src -->
+      <iframe class="header-iframe" src="http://127.0.0.1:8080/" frameborder="0"></iframe>
+      <!-- prod src -->
+      <!-- <iframe class="header-iframe"
+        src="https://tal0311.github.io/MFE-header/"
+        frameborder="0"
+      ></iframe> -->
+    </section>
+
+    <nav class="nav">
+      <iframe id="nav_iframe" class="nav-iframe" src="http://localhost:5173/" frameborder="0"></iframe>
+    </nav>
+
+    <main class="feed">
+      <iframe id="feed_iframe" class="feed-iframe" src="http://localhost:3030/" frameborder="0"></iframe>
+    </main>
+
+    <aside class="aside">
+      <iframe id="aside_iframe" class="aside-iframe" src="http://localhost:4200/" frameborder="0"> </iframe>
+    </aside>
+
+    <!-- js cdn -->
+ 
+    <script type="module" src="js/main.controller.js"></script>
+  </body>
+</html>
