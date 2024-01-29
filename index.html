@@ -23,23 +23,54 @@
   </head>
   <body app="Main Container" class="app-container" onload="onInit()">
     <section class="header">
-         <iframe id="header_iframe" class="header-iframe" src="http://127.0.0.1:8080/" frameborder="0"></iframe>
+      <iframe
+        id="header_iframe"
+        class="header-iframe"
+        src="http://127.0.0.1:8080/"
+        frameborder="0"
+      ></iframe>
     </section>
 
     <nav class="nav">
-      <iframe id="nav_iframe" class="nav-iframe" src="http://localhost:5173/" frameborder="0"></iframe>
+      <iframe
+        id="nav_iframe"
+        class="nav-iframe"
+        src="http://localhost:5173/"
+        frameborder="0"
+      ></iframe>
     </nav>
 
     <main class="feed">
-      <iframe id="feed_iframe" class="feed-iframe" src="http://localhost:3030/" frameborder="0"></iframe>
+      <iframe
+        id="feed_iframe"
+        class="feed-iframe"
+        src="http://localhost:3030/"
+        frameborder="0"
+      ></iframe>
     </main>
 
     <aside class="aside">
-      <iframe id="aside_iframe" class="aside-iframe" src="http://localhost:4200/" frameborder="0"> </iframe>
+      <iframe
+        id="aside_iframe"
+        class="aside-iframe"
+        src="http://localhost:4200/"
+        frameborder="0"
+      >
+      </iframe>
     </aside>
 
-    <!-- js cdn -->
- 
+    <dialog class="add-post-dialog">
+      <form class="add-post-form grid" onsubmit="closeModal(event)">
+          <label for="content">Content</label>
+          <textarea id="content" name="txt"></textarea>
+          <div class="actions-container grid grid-dir-col">
+              <button type="submit">Submit</button>
+              <button type="button" onclick="closeModal(null)">Cancel</button>
+          </div>
+      </form>
+  </dialog>
+  
     <script type="module" src="js/main.controller.js"></script>
+    
   </body>
 </html>

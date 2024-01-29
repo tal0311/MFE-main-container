@@ -1,3 +1,5 @@
+@import './cmps/modal.css';
+
 .app-container[app="Main Container"] {
   margin: 0;
   height: 100vh;

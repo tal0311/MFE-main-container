@@ -1,0 +1,22 @@
+.add-post-dialog{
+    border: none;
+    border-radius: 8px;
+
+}
+
+.add-post-form{
+    gap: 0.5rem;
+    padding: 1rem;
+    width: 50vw;
+    max-width: 400px;
+}
+
+.add-post-form button{
+    /* max-width: 50%; */
+   
+} 
+
+.add-post-form .actions-container{
+    justify-content: space-between;
+    width: 100%;
+}
