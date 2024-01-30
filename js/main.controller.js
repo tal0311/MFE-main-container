@@ -1,10 +1,13 @@
+import { weatherService } from "./services/weather.service.js";
+
 window.onInit = onInit;
 window.closeModal = closeModal;
 
 function onInit() {
-openModalByParams()
+  openModalByParams();
   addEventListeners();
   setHeaderSrc();
+  getWeatherByUserLocation();
 }
 
 function sendDataToIframe(selector, type, payload) {
@@ -39,7 +42,6 @@ function openModal() {
   const elModal = document.querySelector(".add-post-dialog");
   elModal.showModal();
   handleUrlParams("modal", true);
-
 }
 
 function openModalByParams() {
@@ -50,31 +52,28 @@ function openModalByParams() {
   }
 }
 
-
 function closeModal(ev) {
-  debugger
+ 
   if (ev) {
-  console.log('ev', ev);
+    console.log("ev", ev);
     ev.preventDefault();
     const formData = Object.fromEntries(new FormData(ev.target));
-    sendDataToIframe('#feed_iframe', 'add_post', formData)
-    ev.target.reset()
+    sendDataToIframe("#feed_iframe", "add_post", formData);
+    ev.target.reset();
   }
   const elModal = document.querySelector(".add-post-dialog");
   elModal.close();
-  handleUrlParams('modal', false)
+  handleUrlParams("modal", false);
 }
 
-
-function handleUrlParams(paramsName, paramValue){
+function handleUrlParams(paramsName, paramValue) {
   const url = new URL(window.location.href);
-  if(paramValue && paramValue ){
+  if (paramValue && paramValue) {
     url.searchParams.set(paramsName, paramValue);
-  }else{
+  } else {
     url.searchParams.delete(paramsName);
   }
   window.history.pushState({}, "", url);
-
 }
 
 function setHeaderSrc() {
@@ -86,4 +85,20 @@ function setHeaderSrc() {
       : "https://tal0311.github.io/MFE-header/";
 
   elIframe.src = src;
+}
+
+async function getWeatherByUserLocation() {
+  navigator.geolocation.getCurrentPosition(async (position) => {
+    const { latitude, longitude } = position.coords;
+    const weather = await weatherService.getWeatherByLocation({
+      lat: latitude,
+      lng: longitude,
+    });
+    console.log(
+      "🚀 ~ navigator.geolocation.getCurrentPosition ~ weather:",
+      weather
+    );
+
+    sendDataToIframe("#aside_iframe", "display_weather", weather);
+  });
 }
