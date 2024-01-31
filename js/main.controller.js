@@ -21,6 +21,7 @@ function addEventListeners() {
     (event) => {
       const { type, payload } = event.data;
       if (type === "display_user") {
+        console.log("display_user", payload);
         sendDataToIframe("#nav_iframe", "display_user", payload);
       }
       if (type === "display_post") {
@@ -28,9 +29,11 @@ function addEventListeners() {
         sendDataToIframe("#aside_iframe", "display_post", payload);
       }
       if (type === "update_post") {
+        console.log("update_post", payload);
         sendDataToIframe("#feed_iframe", "update_post", payload);
       }
       if (type === "display_modal") {
+        console.log("display_modal");
         openModal();
       }
     },
@@ -55,7 +58,6 @@ function openModalByParams() {
 function closeModal(ev) {
  
   if (ev) {
-    console.log("ev", ev);
     ev.preventDefault();
     const formData = Object.fromEntries(new FormData(ev.target));
     sendDataToIframe("#feed_iframe", "add_post", formData);
@@ -94,11 +96,6 @@ async function getWeatherByUserLocation() {
       lat: latitude,
       lng: longitude,
     });
-    console.log(
-      "🚀 ~ navigator.geolocation.getCurrentPosition ~ weather:",
-      weather
-    );
-
-    sendDataToIframe("#aside_iframe", "display_weather", weather);
+     sendDataToIframe("#aside_iframe", "display_weather", weather);
   });
 }
