@@ -1,4 +1,10 @@
 import { weatherService } from "./services/weather.service.js";
+import { utilService } from "./services/util.service.js";
+
+const state = {
+  loggedIdUser: null,
+  USER_STORAGE_KEY: "loggedinUser",
+};
 
 window.onInit = onInit;
 window.closeModal = closeModal;
@@ -36,6 +42,11 @@ function addEventListeners() {
         console.log("display_modal");
         openModal();
       }
+      if (type === "handle_user") {
+        state.loggedIdUser = payload;
+        console.log("handle_user", payload);
+        utilService.saveToStorage(state.USER_STORAGE_KEY, payload);
+      }
     },
     false
   );
@@ -45,18 +56,27 @@ function openModal() {
   const elModal = document.querySelector(".add-post-dialog");
   elModal.showModal();
   handleUrlParams("modal", true);
+  setUserInModal();
+}
+
+function setUserInModal(){
+  const user = utilService.loadFromStorage(state.USER_STORAGE_KEY);
+  console.log("🚀 ~ setUserInModal ~ user:", user)
+  document.querySelector('.user-preview').innerHTML =`
+  <img src="${user.imgUrl}" alt="User Image" class="modal-user-image">
+  <h2 class="modal-username">${user.username}</h2>
+  `
 }
 
 function openModalByParams() {
   const url = new URL(window.location.href);
   const modal = url.searchParams.get("modal");
   if (modal) {
-    openModal();
-  }
+      openModal();
+      }
 }
 
 function closeModal(ev) {
- 
   if (ev) {
     ev.preventDefault();
     const formData = Object.fromEntries(new FormData(ev.target));
@@ -70,7 +90,7 @@ function closeModal(ev) {
 
 function handleUrlParams(paramsName, paramValue) {
   const url = new URL(window.location.href);
-  if (paramValue && paramValue) {
+  if (paramsName && paramValue) {
     url.searchParams.set(paramsName, paramValue);
   } else {
     url.searchParams.delete(paramsName);
@@ -96,6 +116,6 @@ async function getWeatherByUserLocation() {
       lat: latitude,
       lng: longitude,
     });
-     sendDataToIframe("#aside_iframe", "display_weather", weather);
+    sendDataToIframe("#aside_iframe", "display_weather", weather);
   });
 }

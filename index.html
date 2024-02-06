@@ -62,8 +62,9 @@
     </aside>
 
     <dialog class="add-post-dialog">
-      <form class="add-post-form grid" onsubmit="closeModal(event)">
-          <label for="content">Content</label>
+      <div class="user-preview grid grid-dir-col"></div>
+      <form action="dialog" class="add-post-form grid" onsubmit="closeModal(event)">
+          <label for="content">Compose you'r new post</label>
           <textarea id="content" name="txt"></textarea>
           <div class="actions-container grid grid-dir-col">
               <button type="submit">Submit</button>
