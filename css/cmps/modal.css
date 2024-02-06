@@ -5,8 +5,7 @@
 
 .add-post-form {
   gap: 0.5rem;
-  padding: 1rem;
-  width: 50vw;
+    width: 50vw;
   max-width: 400px;
 }
 
@@ -23,7 +22,7 @@
   justify-content: start;
   align-items: center;
   gap: 1rem;
-  padding-inline: 1rem;
+
 }
 
 .modal-user-image {
@@ -33,4 +32,15 @@
   max-width: 100%;
   height: auto;
   aspect-ratio: 1/1;
+}
+.add-post-dialog textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  resize: none;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  outline: transparent;
+  box-shadow: 0 0 0 1px var(--clr2);
+  
 }
