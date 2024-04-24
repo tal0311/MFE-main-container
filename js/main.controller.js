@@ -2,10 +2,10 @@ import { weatherService } from "./services/weather.service.js";
 import { utilService } from "./services/util.service.js";
 
 const state = {
-  loggedIdUser: null,
+  loggedIdUser: utilService.loadFromStorage("loggedinUser") || null,
   USER_STORAGE_KEY: "loggedinUser",
 };
-
+window.state = state
 window.onInit = onInit;
 window.closeModal = closeModal;
 
@@ -14,38 +14,58 @@ function onInit() {
   addEventListeners();
   setHeaderSrc();
   getWeatherByUserLocation();
+  handleWindowMsg()
 }
 
 function sendDataToIframe(selector, type, payload) {
   const iframe = document.querySelector(selector);
+
+  
   iframe.contentWindow.postMessage({ type, payload }, "*");
 }
 
-function addEventListeners() {
+async function handleWindowMsg(){
+  //TODO: refactor msg function
+}
+
+ function addEventListeners() {
   window.addEventListener(
     "message",
-    (event) => {
-      const { type, payload } = event.data;
+     async (event) => {
+      const { type, payload } =await event.data;
       if (type === "display_user") {
         console.log("display_user", payload);
         sendDataToIframe("#nav_iframe", "display_user", payload);
+        return
       }
       if (type === "display_post") {
-        console.log("display_post", payload);
-        sendDataToIframe("#aside_iframe", "display_post", payload);
+        console.log("display_post", payload, state);
+        sendDataToIframe("#aside_iframe", "display_post", {user: state.loggedIdUser, post:payload});
+        return
       }
       if (type === "update_post") {
         console.log("update_post", payload);
         sendDataToIframe("#feed_iframe", "update_post", payload);
+        return
       }
       if (type === "display_modal") {
         console.log("display_modal");
         openModal();
+        return
       }
       if (type === "handle_user") {
+      
         state.loggedIdUser = payload;
+        
         console.log("handle_user", payload);
+        
         utilService.saveToStorage(state.USER_STORAGE_KEY, payload);
+        return
+      }
+      if(type === 'filter_posts'){
+        console.log(payload);
+        sendDataToIframe('#feed_iframe', 'filter_posts',payload)
+
       }
     },
     false
@@ -61,7 +81,6 @@ function openModal() {
 
 function setUserInModal(){
   const user = utilService.loadFromStorage(state.USER_STORAGE_KEY);
-  console.log("🚀 ~ setUserInModal ~ user:", user)
   document.querySelector('.user-preview').innerHTML =`
   <img src="${user.imgUrl}" alt="User Image" class="modal-user-image">
   <h2 class="modal-username">${user.username}</h2>

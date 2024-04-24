@@ -18,15 +18,22 @@
 .feed {
   grid-area: feed;
    box-shadow: inset 0px -1px 0px lightgray;
+   /* position: relative;
+   z-index: 0; */
+   
 }
 .header {
   grid-area: header;
   box-shadow: inset -1px 0px 2px lightgray;
+  /* position: relative;
+  z-index: 0; */
 }
 .nav {
   grid-area: nav;
  
   box-shadow: inset -1px 0px 2px lightgray;
+  /* position: relative;
+  z-index: 0; */
 }
 
 .aside {
