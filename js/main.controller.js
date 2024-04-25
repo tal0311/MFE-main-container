@@ -1,11 +1,14 @@
 import { weatherService } from "./services/weather.service.js";
 import { utilService } from "./services/util.service.js";
+import {comHub} from "./services/comHub.js";
 
 const state = {
   loggedIdUser: utilService.loadFromStorage("loggedinUser") || null,
   USER_STORAGE_KEY: "loggedinUser",
 };
-window.state = state
+
+
+window.state = state;
 window.onInit = onInit;
 window.closeModal = closeModal;
 
@@ -14,62 +17,11 @@ function onInit() {
   addEventListeners();
   setHeaderSrc();
   getWeatherByUserLocation();
-  handleWindowMsg()
+  handleWindowMsg();
 }
 
-function sendDataToIframe(selector, type, payload) {
-  const iframe = document.querySelector(selector);
-
-  
-  iframe.contentWindow.postMessage({ type, payload }, "*");
-}
-
-async function handleWindowMsg(){
-  //TODO: refactor msg function
-}
-
- function addEventListeners() {
-  window.addEventListener(
-    "message",
-     async (event) => {
-      const { type, payload } =await event.data;
-      if (type === "display_user") {
-        console.log("display_user", payload);
-        sendDataToIframe("#nav_iframe", "display_user", payload);
-        return
-      }
-      if (type === "display_post") {
-        console.log("display_post", payload, state);
-        sendDataToIframe("#aside_iframe", "display_post", {user: state.loggedIdUser, post:payload});
-        return
-      }
-      if (type === "update_post") {
-        console.log("update_post", payload);
-        sendDataToIframe("#feed_iframe", "update_post", payload);
-        return
-      }
-      if (type === "display_modal") {
-        console.log("display_modal");
-        openModal();
-        return
-      }
-      if (type === "handle_user") {
-      
-        state.loggedIdUser = payload;
-        
-        console.log("handle_user", payload);
-        
-        utilService.saveToStorage(state.USER_STORAGE_KEY, payload);
-        return
-      }
-      if(type === 'filter_posts'){
-        console.log(payload);
-        sendDataToIframe('#feed_iframe', 'filter_posts',payload)
-
-      }
-    },
-    false
-  );
+function addEventListeners() {
+  window.addEventListener("message", comHub.handleWindowMsg);
 }
 
 function openModal() {
@@ -79,27 +31,27 @@ function openModal() {
   setUserInModal();
 }
 
-function setUserInModal(){
+function setUserInModal() {
   const user = utilService.loadFromStorage(state.USER_STORAGE_KEY);
-  document.querySelector('.user-preview').innerHTML =`
+  document.querySelector(".user-preview").innerHTML = `
   <img src="${user.imgUrl}" alt="User Image" class="modal-user-image">
   <h2 class="modal-username">${user.username}</h2>
-  `
+  `;
 }
 
 function openModalByParams() {
   const url = new URL(window.location.href);
   const modal = url.searchParams.get("modal");
   if (modal) {
-      openModal();
-      }
+    openModal();
+  }
 }
 
 function closeModal(ev) {
   if (ev) {
     ev.preventDefault();
     const formData = Object.fromEntries(new FormData(ev.target));
-    sendDataToIframe("#feed_iframe", "add_post", formData);
+    comHub.sendDataToIframe("#feed_iframe", "add_post", formData);
     ev.target.reset();
   }
   const elModal = document.querySelector(".add-post-dialog");
@@ -135,6 +87,6 @@ async function getWeatherByUserLocation() {
       lat: latitude,
       lng: longitude,
     });
-    sendDataToIframe("#aside_iframe", "display_weather", weather);
+    comHub.sendDataToIframe("#aside_iframe", "display_weather", weather);
   });
 }
